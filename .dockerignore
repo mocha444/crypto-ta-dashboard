@@ -1,0 +1,15 @@
+node_modules
+.next
+.cache
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+Dockerfile
+docker-compose.yml
+.dockerignore
+.git
+.pi
+AGENTS.md
+CLAUDE.md
+redeploy.sh
+public/sw.js

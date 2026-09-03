@@ -1,0 +1,48 @@
+services:
+  app:
+    container_name: crypto-ta-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: crypto-ta-dashboard:latest
+    restart: unless-stopped
+    init: true  # proper signal forwarding for `npm start`
+    ports:
+      - "4444:4444"
+    user: "1000:1000"
+    environment:
+      NODE_ENV: production
+      PORT: 4444
+    env_file:
+      - .env.local
+    # Resource limits to prevent runaway memory under retry storms.
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    # Healthcheck: curl is not in node:24-slim, so we use a Node inline fetch.
+    # The /api/markets route is a lightweight proxy that returns quickly.
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4444/api/markets').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    # Cache lives on a named volume that is wiped on every `down -v` (see
+    # ./redeploy.sh).  For a fully ephemeral, in-memory cache, comment the
+    # `volumes:` block above and uncomment the `tmpfs:` block below.
+    volumes:
+      - cache:/app/.cache
+    # tmpfs:
+    #   - /app/.cache:size=64M
+
+volumes:
+  # Named volume — survives `restart` and `up --force-recreate`, dies on
+  # `down -v`.  For a cache that holds 5min–2h live data, that's the right
+  # policy: cheap to rebuild, but you don't lose it on every container stop.
+  cache:
+    name: crypto-ta-dashboard-cache

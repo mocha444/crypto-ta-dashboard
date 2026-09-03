@@ -1,0 +1,18 @@
+{
+  "metrics:altcoin": {
+    "data": {
+      "adaBtc": 0.0000026573757152267417,
+      "altSeasonIndex": 28,
+      "seasonLabel": "Neutral",
+      "outperforming": 14,
+      "total": 50
+    },
+    "fetchedAt": 1788414569345,
+    "ttlMs": 10800000
+  },
+  "summary:text": {
+    "data": "Overall sentiment is cautious‑neutral as BTC dominance stays high (≈59%) and the AltSeasonIdx is low. A key technical level to watch for BTC is around $77,420, while the top altcoin ETH is anchored near $2,393. In the short term the market appears to be consolidating, with most assets flat‑lined and only ADA showing modest bullish momentum.",
+    "fetchedAt": 1788414571470,
+    "ttlMs": 10800000
+  }
+}
