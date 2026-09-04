@@ -6,6 +6,7 @@ import { getCoinIndicators, type CoinIndicators } from "@/lib/ta";
 import { detectDivergence } from "@/lib/divergence";
 import AutoRefresh from "@/components/AutoRefresh";
 import InstallPWA from "@/components/InstallPWA";
+import DivergenceBanner from "@/components/DivergenceBanner";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +28,8 @@ export default function Home() {
           </Suspense>
         </div>
       </header>
+
+      <DivergenceBanner />
 
       {/* ADA first — the focal point */}
       <Suspense fallback={<RundownSkeleton />}>
@@ -213,7 +216,7 @@ async function AdaRundownSection() {
 
       {/* Brief rundown: ADA · ADA/BTC · BTC dominance */}
       <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <RundownMetric title="ADA / BTC" sub="Cardano vs Bitcoin" value={`₿${m.adaBtc.toFixed(8)}`} detail={adaBtcChange >= 0 ? `+${adaBtcChange.toFixed(2)}% vs these levels` : `${adaBtcChange.toFixed(2)}% vs these levels`} />
+        <RundownMetric title="ADA / BTC" sub="Cardano vs Bitcoin" value={`₿${((ada?.current_price ?? 0) / (btc?.current_price ?? 1)).toFixed(8)}`} detail={adaBtcChange >= 0 ? `+${adaBtcChange.toFixed(2)}% vs these levels` : `${adaBtcChange.toFixed(2)}% vs these levels`} />
         <RundownMetric title="BTC Dominance" sub="of total market cap" value={`${btcDom.toFixed(1)}%`} detail="Bitcoin's weight in the market" />
         <RundownMetric title="Altcoin Season" sub="top coins beating BTC (30d)" value={String(m.altSeasonIndex)} detail={`${m.seasonLabel}`} />
       </section>
